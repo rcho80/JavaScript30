@@ -54,6 +54,13 @@ body {
   max-width: 50px;
 }
 
+.material-icons {
+  color: white;
+  text-align: center;
+  max-width: 50px;
+  cursor: pointer;
+}
+
 .player__button:focus {
   border-color: #ffc600;
 }
@@ -68,7 +75,7 @@ body {
   position: absolute;
   bottom: 0;
   width: 100%;
-  transform: translateY(100%) translateY(-5px);
+  /*transform: translateY(100%) translateY(-5px);*/
   transition: all .3s;
   flex-wrap: wrap;
   background: rgba(0,0,0,0.1);
@@ -94,7 +101,7 @@ body {
   height: 5px;
   transition: height 0.3s;
   background: rgba(0,0,0,0.5);
-  cursor: ew-resize;
+  cursor: pointer;
 }
 
 .progress__filled {
@@ -102,6 +109,7 @@ body {
   background: #ffc600;
   flex: 0;
   flex-basis: 50%;
+  cursor: pointer;
 }
 
 /* unholy css to style input type="range" */
