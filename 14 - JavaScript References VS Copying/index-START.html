@@ -8,33 +8,58 @@
 
   <script>
     // start with strings, numbers and booleans
+    let age = 100;
+    let age2 = age;
+    console.log(age,age2); // (100,100)
+    let age = 200;
+    console.log(age,age2); // (200,100) because the value of age goes into the variable at the same time. So is defined at the particular time. And if you change the original one, it will not update the second unless specifically called. 
+    let age2 = age;
+    console.log(age,age2); // (200,200) As now defined 
+    // same applies for strings and booleans
+    let name = "RC";
+    let name2 = name;
+    console.log(name,name2); // (RC,RC)
+    name = 'choice'
+    console.log(name,name2); // (choice,RC)
+   
+
+   //  this is different for ARRAYS and OBJECTS. 
 
     // Let's say we have an array
     const players = ['Wes', 'Sarah', 'Ryan', 'Poppy'];
 
-    // and we want to make a copy of it.
+   //  // and we want to make a copy of it.
+    const team = players;
+    console.log(players,team); // (both show same array)
 
     // You might think we can just do something like this:
-
+    team[3] = 'lux'; //team = ['Wes', 'Sarah', 'Ryan', 'lux'];
+ 
     // however what happens when we update that array?
-
+   console.log(players) = ['Wes', 'Sarah', 'Ryan', 'lux']; // changed as well the original. 
     // now here is the problem!
-
+    If you update an array, it will always reference back to original 
     // oh no - we have edited the original array too!
 
     // Why? It's because that is an array reference, not an array copy. They both point to the same array!
 
-    // So, how do we fix this? We take a copy instead!
+   //  // So, how do we fix this? We take a copy instead!
 
-    // one way
+   //  // one way = slice option
+    const team2 = players.slice(); // returns entire array as a copy and leaves original array untouched. 
 
-    // or create a new array and concat the old one in
+    // concat option = or create a new array and concat the old one in 
+    const team3 = [].concat(players);
 
-    // or use the new ES6 Spread
+    // spread option = or use the new ES6 Spread
+    const team4 = [...players]; // will take every item from iterable and place into the container 
 
-    // now when we update it, the original one isn't changed
+    // Array.from option
+    const team5 = Array.from(players);
 
-    // The same thing goes for objects, let's say we have a person object
+    now when we update it, the original one isn't changed
+
+    The same thing goes for objects, let's say we have a person object
 
     // with Objects
     const person = {
@@ -43,12 +68,43 @@
     };
 
     // and think we make a copy:
+    const captain = person;
+    // captain.number = 99; // this will add number to both captain and person
+    // captain.age = 50; // this will change age for both captain and person
 
     // how do we take a copy instead?
-
+    //use object.assign
+    // Object.assign({}) // start with blank {object} inside object.assign, then pass the object you wish to copy all properties, then fold in the new properties you want to edit or add
+    const cap2 = Object.assign({}, person, { age: 12, number:45});
+    // console.log(cap2) = {name: 'Wes Bos',age: 12, number:45};
+   
+    //this will leave the original object as is
+     // const person = {name: 'Wes Bos', age: 80}; leaves as original 
     // We will hopefully soon see the object ...spread
+    const cap3 = {...person}; // to come
 
     // Things to note - this is only 1 level deep - both for Arrays and Objects. lodash has a cloneDeep method, but you should think twice before using it.
+      const ray = {
+        name = "choice";
+        age: 50;
+        social: {
+          insta: @ainda
+          twitter: #oiii
+        }
+      }
+
+    // if you make copy it will only work for first layer
+    const dev = Object.assign({}, ray); // makes copy of ray
+    dev.name = "RC"; // will change name for dev only. ray will stay as choice. As it takes a copy and not a reference 
+    //however
+    dev.social.twitter = 'cool'
+    // now dev.social.twitter = cool
+    // and ray.social.twitter = cool because Object.assign only goes one level deep. Will need to use clonedeep.. but think if needed
+    // very rarely need to clone levels 
+
+    //a poor mans deep clone that leaves the original 
+    const dev2 = JSON.parse(JSON.stringify(ray)); // can pass an object to JSON.stringify which returns a string and then immediately parse this back into object 
+
 
   </script>
 
