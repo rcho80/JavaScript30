@@ -23,12 +23,85 @@
       <input type="text" name="item" placeholder="Item Name" required>
       <input type="submit" value="+ Add Item">
     </form>
-  </div>
+      <input type='button' value="Select All" class="getAll"/>
+    </div>
 
 <script>
   const addItems = document.querySelector('.add-items');
   const itemsList = document.querySelector('.plates');
-  const items = [];
+  const items = JSON.parse(localStorage.getItem('items')) || [];
+  const grabAll = document.querySelector('.getAll');
+
+  function addItem(e) {
+    //use e.preventDefault() to stop the page reloading as form usually sends details to server side or reloads the page
+      e.preventDefault(); 
+  // take the words entered into form and place into an object//
+  // can use this to find specific name=item instead of document.queryselector... because 'this.'' is going to be the form (tag), and we look for something with name attribute = item//
+    const text = (this.querySelector('[name=item]')).value;
+    const item = {
+      // text: text, or use shorthand ES6 property below://
+      text,
+      done: false,
+    };
+    items.push(item);
+    populateList(items, itemsList);
+    // below example of storing data in localStorage so when refresh page, the items are kept
+    localStorage.setItem('items', JSON.stringify(items));
+    this.reset();
+  }
+
+// note for perfomance, the below will render the entire UL each time new item is added and hence affect performance issues if its a large list. Thus react or angular is suggested in this case to only add change to the minimum HTML added and not whole UL each time being refreshed
+
+  function populateList(plates = [], platesList) {
+    platesList.innerHTML = plates.map((plate,i) => {
+      return `
+        <li> 
+          <input type='checkbox' data-index=${i} id='item${i}' ${plate.done ? 'checked' : ''}/>
+          <label for='item${i}'>${plate.text}</label>
+        </li>
+      `;
+    }).join('');
+  };
+
+
+// Event Delegation = listen to an event at higher level and then check to see if the below level is what we want 
+// when listening to an event, need to look at impact of applying at child level vs parent level. So in this case, by adding eventListener to the input = checkbox (child), this will create issue with any new additional inputs added as these will be after the eventListener taking place. Thus need to look at applying eventListener to the Parent level, i.e. UL class = plates. Apply to this parent level and then determine which child area is applicable for event 
+
+  function toggleDone(e) {
+  // need to check if the target matches what we are looking for in child level
+      if(!e.target.matches('input')) return; // means skip this unless target=input
+      // now only shows input items when clicking checkboxes
+      const el = e.target; // will tell the index of the corresponding item within array 
+      const index = el.dataset.index;
+      items[index].done = !items[index].done; //if this is true it will be the opposite
+      localStorage.setItem('items', JSON.stringify(items));
+      populateList(items, itemsList);
+  }
+
+// to change the name of button upon clicking of select all to deselect all
+const handleName = document.querySelector('.getAll'); 
+
+// set variable equal to all boxes checked to true initially
+// then use if statement to change state if all are checked or all are unchcecked
+function handleAll(e) {
+  const checkingAll = items.every((item) => item.done === true);
+    if (checkingAll) {
+      items.forEach((item) => (item.done = false));
+      handleName.value = "Select All";
+  } else {
+      items.forEach((item) => (item.done = true));
+      handleName.value = "Deselect All";
+  }
+    localStorage.setItem('items', JSON.stringify(items));
+    populateList(items, itemsList);
+}
+
+
+// use submit to check for event as it includes all options e.g. pressing enter, clicking the additem box 
+ addItems.addEventListener('submit', addItem);
+ itemsList.addEventListener('click', toggleDone);
+ grabAll.addEventListener('click', handleAll);
+ populateList(items, itemsList);
 
 </script>
 
