@@ -7,7 +7,8 @@
 <body>
 
   <div class="hero">
-    <h1 contenteditable>🔥WOAH!</h1>
+    <!-- contenteditable allows to edit directly on page -->
+    <h1 contenteditable>🔥WOAH!</h1>  
   </div>
 
   <style>
@@ -35,6 +36,49 @@
   </style>
 
 <script>
+
+  const hero = document.querySelector('.hero');
+  const text = hero.querySelector('h1');
+  const walk = 500; // 500px
+
+  function getShadows(e) {
+    //get width and height of hero
+    // const width = hero.offsetWidth;
+    // const height = hero.offsetHeight;
+  //or desctructure as below:
+    const { offsetWidth: width, offsetHeight: height } = hero;
+  
+  // also need to know where exactly the cursor is 
+  // again using destructuring; e=event (i.e. e.offsetX and e.offsetY)
+    let { offsetX: x, offsetY: y } = e;
+
+  //although event is on hero, if there are children elements then the mousemove will take effect on the children and hence give different readings
+  //need some maths here to modify the x and y values to be consistent across the page
+  // ie. what is this and e.target? console.log(this, e.target)
+  //this will be what event is listened on / and target is what is being pointed or triggered on page
+  // so need to make these two things the same 
+    if(this !== e.target) {
+      x = x + e.target.offsetLeft; // add distance from left of pg to the h1 element numbers triggered
+      y = y + e.target.offsetTop; // add distance from top of pg to the h1 element numbers triggered
+    }
+    
+  //how far should the shadow go on page; how many pixels at its most should it be stretched?
+  // this makes the distance between -50 to 50 (i.e. 100)
+  const xWalk = Math.round(( x / width * walk) - (walk / 2)); 
+  // this makes the distance between -50 to 50 (i.e. 100)
+  const yWalk = Math.round(( y / height * walk) - (walk / 2)); 
+
+// {* -1} will make the px negative 
+  text.style.textShadow = `
+      ${xWalk}px ${yWalk}px 0 rgba(255,0,255,0.7),
+      ${xWalk * - 1}px ${yWalk}px 0 rgba(0,255,255,0.7),  
+      ${yWalk}px ${xWalk * - 1}px 0 rgba(0,255,0,0.7),
+      ${yWalk * - 1}px ${xWalk}px 0 rgba(0,0,255,0.7)
+     `;
+  }
+
+  hero.addEventListener('mousemove', getShadows);
+
 </script>
 </body>
 </html>
