@@ -54,6 +54,25 @@
   </div>
 
 <script>
+  const nav = document.querySelector('#main');
+  //work out the amount of pixels on page to the top of the main(i.e navbar on page) = offsetTop
+    const topOfNav = nav.offsetTop
+  // then calculate the window.scrollY to be the same point it matches offsetTop
+  // then make if statement at this point
+  function fixNav() {
+    if(window.scrollY >= topOfNav) {
+    //when we make a nav element fixed position CSS (as is here fixed-nav), it no longer takes up space and sort of floats on top of the browser. because of reflow on the page, the class= site-wrap then takes up the empty space now and so creates a jerky page reaction. thus need to calculate the nav height and enter this in by adding some padding
+      document.body.style.paddingTop = nav.offsetHeight + 'px';
+
+      //create classList to the body and not the children elements as easier to manage 
+      document.body.classList.add('fixed-nav');
+    } else {
+      document.body.style.paddingTop = 0;
+      document.body.classList.remove('fixed-nav');
+    }
+  } 
+
+  window.addEventListener('scroll', fixNav);
 
 </script>
 
