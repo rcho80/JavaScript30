@@ -42,6 +42,25 @@
 
 <button></button>
 <script>
+// bubbling = when have nested elements, it goes up the chain(i.e child to parent and to body) and lists
+// i.e. click on div='three' will trigger clicks as well on three, two, one, body(bod) etc...
+
+//capture: true = capture goes from top -> down i.e. html, body, div = one, two three..etc
+//will grab details on way down the list (opposite concept to bubbling)
+
+// example.stopPropagation()  = stop propagation = will stop bubbling event up 
+//no longer trigger events on the parent elements on way up 
+
+//once: true = unbinds itself after listening to event once i.e. will run the click once only 
+//example to use is on store checkout to stop customer clicking by mistake 
+
+const divs = document.querySelectorAll('div');
+
+function logText(e) {
+  console.log(this.classList.value)
+}
+
+divs.forEach(div => div.addEventListener('click', logText));
 
 </script>
 </body>
