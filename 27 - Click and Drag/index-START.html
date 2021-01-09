@@ -35,6 +35,54 @@
   </div>
 
 <script>
+const slider = document.querySelector('.items');
+let isDown = false;
+let startX;
+let scrollLeft;
+
+function goDown(e){
+    isDown = true;
+    slider.classList.add('active');
+    //e.pageX shows the distance of x-axis from the left when clicked
+    //therefore need to handle any offsetLeft (i.e. margin of page on .items)
+    //e shows the mousevent details
+    startX = e.pageX - slider.offsetLeft; // where did they initially click? 
+    //console.log(startX) - here shows where the click is on page
+    //but need to log the x distance as the mouse moves too (i.e.scrollLeft)
+    //scrollLeft is property of no. of pixels from left edge
+    //here we have placed scrollLeft into variable to use with mousemove smoothly
+    scrollLeft = slider.scrollLeft;
+    
+};
+
+function goLeave(){
+    isDown = false;
+    slider.classList.remove('active');
+};
+
+function goUp(){
+    isDown = false;
+    slider.classList.remove('active');
+};
+
+function goMove(e){
+//isDown runs when mouse moves and so need to stop default setting
+    if(!isDown) return; // stops fn running
+    e.preventDefault(); // stops browser running anything on events in background 
+    // recalculate where it is on pg everytime mouse is moved 
+    const x = e.pageX - slider.offsetLeft; 
+    // console.log({x, startX}) //tip: can see value of variables by using object brackets
+    // walk  = how far mousemove has deviated from initial click
+    const walk = (x - startX) * 3; // by 3 is the scroll speed for smooth experience
+    // use scrollLeft distance below in variable and not = walk directly but minus as otherwise if scrollLeft = walk, it recalculates scrollLeft with every move and makes jerky experience 
+    slider.scrollLeft = scrollLeft - walk;
+};
+
+slider.addEventListener('mousedown', goDown);
+slider.addEventListener('mouseleave', goLeave);
+slider.addEventListener('mouseup', goUp);
+slider.addEventListener('mousemove', goMove);
+
 </script>
 
   </body>
