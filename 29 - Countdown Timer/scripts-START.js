@@ -26,9 +26,11 @@ function timer(seconds) {
 
 function displayTimeLeft(seconds) {
 	const minutes = Math.floor(seconds / 60); //will round out decimals to lowest number 
+	const remainderMinutes = minutes % 60;
 	const remainderSeconds = seconds % 60; // IMPORTANT - e.g 599 / 60 = 9.98333, then remove whole numbers (9) and will show .98333 * 60 = 59 sec
+	const hours = Math.floor(minutes / 60);
 	// ternary fn below = if the remainderseconds is < 10, then want to return 0 or nothing, and then give remaining seconds left
-	const display = `${minutes}:${remainderSeconds < 10 ? '0' : ''}${remainderSeconds}`;
+	const display = `${hours}:${remainderMinutes < 10 ? '0' : ''}${remainderMinutes}:${remainderSeconds < 10 ? '0' : ''}${remainderSeconds}`;
 	document.title = display; //update title of document to the time countdowning 
 	timerDisplay.textContent = display;
 }
@@ -37,9 +39,9 @@ function displayTimeLeft(seconds) {
 //timestamp = 'then' time created above
 function displayEndTime(timestamp) {
 	const end = new Date(timestamp);
-	const hour = end.getHours();
+	const hours = end.getHours();
 	//if hour is showing more than 12 then change to reflect
-	const adjustedHour = hour > 12 ? hour - 12 : hour;
+	const adjustedHour = hours > 12 ? hours - 12 : hours;
 	const minutes = end.getMinutes();
 	//minutes needs to show 10:03 minutes and not 10:3 minutes
 	endTime.textContent = `Be Back At ${adjustedHour}:${minutes < 10 ? '0' : ''}${minutes}`;
