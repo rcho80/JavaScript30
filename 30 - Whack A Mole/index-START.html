@@ -36,6 +36,54 @@
   const holes = document.querySelectorAll('.hole');
   const scoreBoard = document.querySelector('.score');
   const moles = document.querySelectorAll('.mole');
+  let lastHole;
+  let timeUp = false;
+  let score = 0;
+
+//set random time to pop up 
+ function randomTime(min, max) {
+  return Math.round(Math.random() * (max - min) + min);
+};
+
+//picks which random hole to pop up 
+function randomHole(holes) {
+  // holes is node.list that contains all 6 * holes
+  const idx = Math.floor(Math.random() * holes.length);
+  const hole = holes[idx]; // i.e. hole 0, 1, 2 ....6
+  if(hole === lastHole) {
+    console.log("thats the same one"); //to avoid same hole consecutively
+    return randomHole(holes); //pass through again 
+  }
+  lastHole = hole; //captures what each hole is 
+  return hole;
+};
+
+function peep() {
+  const time = randomTime(200,1000);
+  const hole = randomHole(holes);
+  hole.classList.add('up');  // will trigger relevant css to kick in 
+  setTimeout(() => {
+    hole.classList.remove('up');
+    if(!timeUp) peep(); //if timeup is set to true, then run peep() = this is to stop from running 
+  }, time); //after time period, remove the class 
+}
+
+function startGame() {
+  scoreBoard.textContent = 0; //reset scoreboard
+  timeUp = false; //in case played game and want to reset to play again 
+  score = 0; 
+  peep();
+  setTimeout(() => timeUp = true, 10000); //set timeup to true after 10 seconds
+}
+
+function bonk(e) {
+  if(!e.isTrusted) return; // inside mousevent of e, there is element called isTrusted = true. this shows if was genuine click. to avoid cheaters playing game without clicking moles
+  score++;
+  this.classList.remove('up'); //if mole is hit, then they should fall down even before timer ends
+  scoreBoard.textContent = score;
+};
+
+moles.forEach(mole => mole.addEventListener('click', bonk));
 
 </script>
 </body>
