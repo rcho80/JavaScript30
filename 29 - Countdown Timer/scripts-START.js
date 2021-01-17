@@ -44,7 +44,7 @@ function displayEndTime(timestamp) {
 	const adjustedHour = hours > 12 ? hours - 12 : hours;
 	const minutes = end.getMinutes();
 	//minutes needs to show 10:03 minutes and not 10:3 minutes
-	endTime.textContent = `Be Back At ${adjustedHour}:${minutes < 10 ? '0' : ''}${minutes}`;
+	endTime.textContent = `Come back by ${adjustedHour}:${minutes < 10 ? '0' : ''}${minutes}`;
 }
 
 function startTimer() {
